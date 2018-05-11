@@ -17,9 +17,9 @@
 		<div class="panel-heading">
 			<button class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> 批量删除</button>
 			<!-- <a href="/admin/admin/create" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> 添加管理员</a> -->
-			<a href="javascript:;" data-toggle="modal" data-target="#add" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> 添加管理员</a>
+			<a href="javascript:void(0);" data-toggle="modal" data-target="#add" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> 添加管理员</a>
 			
-			<p class="pull-right tots" >共有 <span id="tot">{{$tot}}</span> 条数据</p>
+			<p class="pull-right tots" >共有 <span id="tot"></span> 条数据</p>
 			<form action="" class="form-inline pull-right">
 				<div class="form-group">
 					<input type="text" name="" class="form-control" placeholder="请输入你要搜索的内容" id="">
@@ -38,31 +38,31 @@
 			<th>状态</th>
 			<th>操作</th>
 
-			@foreach($data as $value)
-			<tr>
-				<td><input type="checkbox" name="" id=""></td>
-				<td>{{$value->id}}</td>
-				<td>{{$value->name}}</td>
-				<td>{{date('Y-m-d H:i:s',$value->time)}}</td>
+			{{--@foreach($data as $value)--}}
+			{{--<tr>--}}
+				{{--<td><input type="checkbox" name="" id=""></td>--}}
+				{{--<td>{{$value->id}}</td>--}}
+				{{--<td>{{$value->name}}</td>--}}
+				{{--<td>{{date('Y-m-d H:i:s',$value->time)}}</td>--}}
 
-				@if($value->status)
-					<td><span class="btn btn-danger" onclick="status(this,{{$value->id}},1)">禁用</span></td>
-				@else
+				{{--@if($value->status)--}}
+					{{--<td><span class="btn btn-danger" onclick="status(this,{{$value->id}},1)">禁用</span></td>--}}
+				{{--@else--}}
 
-					<td><span class="btn btn-success" onclick="status(this,{{$value->id}},0)">正常</span></td>
-				@endif
-				
-				<td><a href="javascript:;" onclick="edit({{$value->id}})" data-toggle="modal" data-target="#edit" class="glyphicon glyphicon-pencil"></a>&nbsp;&nbsp;&nbsp;<a href="javascript:;" onclick="deletes(this,{{$value->id}})" class="glyphicon glyphicon-trash"></a></td>
-			</tr>
-			@endforeach
-			
+					{{--<td><span class="btn btn-success" onclick="status(this,{{$value->id}},0)">正常</span></td>--}}
+				{{--@endif--}}
+				{{----}}
+				{{--<td><a href="javascript:;" onclick="edit({{$value->id}})" data-toggle="modal" data-target="#edit" class="glyphicon glyphicon-pencil"></a>&nbsp;&nbsp;&nbsp;<a href="javascript:;" onclick="deletes(this,{{$value->id}})" class="glyphicon glyphicon-trash"></a></td>--}}
+			{{--</tr>--}}
+			{{--@endforeach--}}
+			{{----}}
 
-		</table>
-		<!-- 分页效果 -->
-		<div class="panel-footer">
-			{{ $data->links() }}
+		{{--</table>--}}
+		{{--<!-- 分页效果 -->--}}
+		{{--<div class="panel-footer">--}}
+			{{--{{ $data->links() }}--}}
 
-		</div>
+		{{--</div>--}}
 	</div>
 </div>
 <!-- 添加页面模态框 -->
@@ -75,29 +75,30 @@
 			</div>
 			<div class="modal-body">
 				<form action="" onsubmit="return false;" id="formAdd">
+					{{csrf_field()}}
 					<div class="form-group">
 						<label for="">用户名</label>
-						<input type="text" name="name" class="form-control" placeholder="请输入原密码" id="">
+						<input type="text" name="name"  class="form-control" placeholder="管理员名称" >
 						<div id="userInfo">
 
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="">密码</label>
-						<input type="password" name="pass" class="form-control" placeholder="请输入新密码" id="">
+						<input type="password" name="pass" class="form-control" placeholder="请输入新密码" >
 						<div id="passInfo">
 
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="">确认密码</label>
-						<input type="password" name="repass" class="form-control" placeholder="请再次输入密码" id="">
+						<input type="password" name="repass"  class="form-control" placeholder="请再次输入密码" >
 					</div>
 					<div class="form-group">
 						<label for="">状态</label>
 						<br>
-						<input type="radio" name="status" checked value="0" id="">正常
-						<input type="radio" name="status" value="1" id="">禁用
+						<input type="radio" name="status" checked value="0" >正常
+						<input type="radio" name="status" value="1" >禁用
 					</div>
 					<div class="form-group pull-right">
 						<input type="submit" value="提交" onclick="add()" class="btn btn-success">
@@ -238,58 +239,46 @@
 		})
 	}
 	// 添加的处理操作
-
 	function add(){
-		// 表单序列化
-
-		str=$("#formAdd").serialize();
-
 		// 提交到下一个页面
+        $.ajax({
+            'url':'/admin/admin/store',
+            data: new FormData($('#formAdd')[0]),
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            success: function(data) {
+                if (data==1) {
+                    // 关闭弹框
+                    $(".close").click();
+                    // 重置表单内容
+                    $("#reset").click();
+                    // 清空提示信息
+                    $("#passInfo").html('');
+                    $("#nameInfo").html('');
+                    window.location.reload();
+                }else if(data){
+                    // 用户名提示信息
+                    var str='';
+                    if (data.name) {
+                        str="<div class='alert alert-danger'>"+data.name+"</div>";
+                    }else{
+                        str="<div class='alert alert-success'>√</div>";
+                    }
+                    $("#userInfo").html(str);
+                    // 密码提示信息
+                    if (data.pass) {
+                        str="<div class='alert alert-danger'>"+data.pass+"</div>";
+                    }else{
+                        str="<div class='alert alert-success'>√</div>";
+                    }
+                    $("#passInfo").html(str);
+                }else{
+                    alert('添加失败');
+                }
+            }
+        })
 
-		$.post('/admin/admin',{str:str,'_token':'{{csrf_token()}}'},function(data){
-
-			// 判断data
-			if (data==1) {
-				// 关闭弹框
-				$(".close").click();
-				// 重置表单内容
-				$("#reset").click();
-
-				// 清空提示信息
-
-				$("#passInfo").html('');
-				$("#nameInfo").html('');
-
-				window.location.reload();
-				
-
-			}else if(data){
-				// 用户名提示信息
-				var str='';
-				if (data.name) {
-					str="<div class='alert alert-danger'>"+data.name+"</div>";
-				}else{
-					str="<div class='alert alert-success'>√</div>";
-				}
-
-				$("#userInfo").html(str);
-
-				// 密码提示信息
-
-				if (data.pass) {
-					str="<div class='alert alert-danger'>"+data.pass+"</div>";
-				}else{
-					str="<div class='alert alert-success'>√</div>";
-				}
-
-				$("#passInfo").html(str);
-
-
-				
-			}else{
-				alert('添加失败');
-			}
-		});
 	}
 </script>
 @endsection

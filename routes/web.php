@@ -17,7 +17,8 @@
         //首页
         Route::get('/','IndexController@index');
         //管理员
-        Route::resource('admin','AdminController');
+        Route::get('admin','AdminController@index');
+        Route::post('admin/store','AdminController@store');
         //用户
         Route::resource('user','UserController');
     });
