@@ -5,8 +5,11 @@
 	<title>麦子商城 后台管理系统</title>
 	<link rel="shortcut icon" href="/style/admin/img/1.png">
 	<link rel="stylesheet" href="/style/admin/bs/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/style/admin/bs/css/sweetalert.css">
 	<script src="/style/admin/bs/js/jquery.min.js"></script>
 	<script src="/style/admin/bs/js/bootstrap.min.js"></script>
+	<script src=" {{asset('style/admin/bs/js/sweetalert.js')}}"></script>
+	<script src=" {{asset('style/admin/bs/js/common.js')}}"></script>
 	<style>
 		.navbar-blue{
 			background-color: #ccc;
@@ -210,5 +213,6 @@
 	});
 	
 	$("#{{$name}}").click();
+
 </script>
 </html>

@@ -34,7 +34,7 @@ class Controller extends BaseController
      * @param int $status
      * @return json
      */
-    public function err($content = null, $message = null, $status = 400)
+    public function err($content = null, $message = null, $status = 200)
     {
         return response()->json([
             'code' => 1,

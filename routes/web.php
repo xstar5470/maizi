@@ -19,6 +19,7 @@
         //管理员
         Route::get('admin','AdminController@index');
         Route::post('admin/store','AdminController@store');
+        Route::post('admin/delete','AdminController@destroy');
         //用户
         Route::resource('user','UserController');
     });
