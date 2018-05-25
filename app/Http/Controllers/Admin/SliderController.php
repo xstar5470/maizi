@@ -13,16 +13,12 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
 
 
-class AdminController extends Controller
+class SliderController extends Controller
 {
     public function index(){
-        $tot = Admin::count();
-        $admins = Admin::paginate(15);
-        $admins->map(function ($item, $key) {
-            $item['pass'] = Crypt::decrypt($item['pass']);
-        });
-
-        return view('admin.admin.index',compact('tot','admins'));
+        $data = [];
+        $tot = '';
+        return view('admin.system.slider.index',compact('tot','data'));
     }
 
 

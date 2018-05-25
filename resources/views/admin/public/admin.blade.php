@@ -7,6 +7,7 @@
 	<link rel="stylesheet" href="/style/admin/bs/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/style/admin/bs/css/sweetalert.css">
 	<script src="/style/admin/bs/js/jquery.min.js"></script>
+
 	<script src="/style/admin/bs/js/bootstrap.min.js"></script>
 	<script src=" {{asset('style/admin/bs/js/sweetalert.js')}}"></script>
 	<script src=" {{asset('style/admin/bs/js/common.js')}}"></script>
@@ -111,7 +112,7 @@
 						<h2 class="panel-title"><span class="glyphicon glyphicon-tasks"></span> 分类管理</h2>
 					</div>
 					<ul class="list-group">
-					    <li class="list-group-item"><a href="">分类列表</a></li> 	
+					    <li class="list-group-item"><a href="/admin/type">分类列表</a></li>
 					</ul>
 				</div>
 				<!-- 商品管理 -->
@@ -149,7 +150,7 @@
 					</div>
 					<ul class="list-group">
 					    <li class="list-group-item"><a href="">系统配置</a></li>
-					    <li class="list-group-item"><a href="">轮播图管理</a></li>
+					    <li class="list-group-item"><a href="/admin/system/slider">轮播图管理</a></li>
 					    <li class="list-group-item"><a href="">广告管理</a></li>
 					 	
 					</ul>

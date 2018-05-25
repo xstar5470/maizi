@@ -1,13 +1,13 @@
 @extends('admin.public.admin')
 
 @section('main')
-<!-- 内容 -->
-<div class="col-md-10">
-	
+	<link rel="stylesheet" href="{{asset('diyUpload/css/upload.css')}}">
+    <script src="{{asset('diyUpload/js/upload.js')}}"></script>
+<div class="col-md-10 box-upload">
 	<ol class="breadcrumb">
 		<li><a href="#"><span class="glyphicon glyphicon-home"></span> 首页</a></li>
-		<li><a href="#">管理员管理</a></li>
-		<li class="active">管理员列表</li>
+		<li><a href="#">轮播图管理</a></li>
+		<li class="active">轮播图列表</li>
 		<span style="display:inline-block;text-indent:5px;color: green">(共有{{$tot}}条数据)</span>
 		<button class="btn btn-primary btn-xs pull-right"><span class="glyphicon glyphicon-refresh"></span></button>
 	</ol>
@@ -17,14 +17,14 @@
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<button class="btn btn-danger" onclick="deletes(0)"><span class="glyphicon glyphicon-trash"></span> 批量删除</button>
-			<a href="javascript:void(0);"  class="btn btn-success creation"><span class="glyphicon glyphicon-plus"></span> 添加管理员</a>
+			<a href="javascript:void(0);"  class="btn btn-success creation"><span class="glyphicon glyphicon-plus"></span> 添加轮播图</a>
 
 
 			<form action="" class="form-inline pull-right">
 				<div class="form-group">
-					<input type="text" name="" class="form-control" placeholder="请输入你要搜索的内容" id="">
+					<input type="text" name="" class="form-control" placeholder="请输入你要搜索的内容">
 				</div>
-				
+
 				<input type="submit" value="搜索" class="btn btn-success">
 			</form>
 
@@ -33,23 +33,20 @@
 		<table class="table-bordered table table-hover">
 			<th width="100">勾选</th>
 			<th>ID</th>
-			<th>NAME</th>
-			<th>加入时间</th>
-			<th>状态</th>
+			<th>标题</th>
+			<th>链接</th>
+			<th>排序</th>
+			<th>图片</th>
 			<th>操作</th>
-            @if(count($admins)>0)
-			@foreach($admins as $value)
+            @if(count($data)>0)
+			@foreach($data as $value)
 				<tr>
 					<td><input type="checkbox" name="" id="{{$value->id}}"></td>
 					<td>{{$value->id}}</td>
-					<td>{{$value->name}}</td>
-					<td>{{date('Y-m-d H:i:s',$value->dateline)}}</td>
-
-					@if($value->status)
-						<td><span class="btn btn-danger status" data-id="{{$value->id}}" data-status="1">禁用</span></td>
-					@else
-						<td><span class="btn btn-success status" data-id="{{$value->id}}" data-status="0">正常</span></td>
-					@endif
+					<td>{{$value->title}}</td>
+					<td>{{$value->link}}</td>
+					<td>{{$value->sort}}</td>
+					<td>{{$value->img}}</td>
 
 					<td ><a href="javascript:;"  data-admin="{{$value}}"  class="glyphicon glyphicon-pencil editaction"></a>&nbsp;&nbsp;&nbsp;<a href="javascript:;" onclick="deletes({{$value->id}})" class="glyphicon glyphicon-trash"></a></td>
 				</tr>
@@ -65,7 +62,7 @@
 		</table>
 		<!-- 分页效果 -->
 		<div class="panel-footer">
-			{{ $admins->links() }}
+			{{--{{ $data->links() }}--}}
 
 		</div>
 	</div>
@@ -79,62 +76,75 @@
 				<h4 class="modal-title"></h4>
 			</div>
 			<div class="modal-body">
-				<form action="" onsubmit="return false;" id="formAdd">
+				<form  onsubmit="return false;" id="formAdd">
 					{{csrf_field()}}
 					<input type="hidden" name="id" id="id">
 					<div class="form-group">
-						<label for="">管理员名</label>
-						<input type="text" name="name" id="name" class="form-control" placeholder="管理员名称" >
-						<div class="name_info">
-
-						</div>
+						<label for="">标题</label>
+						<input type="text" name="title" id="title" class="form-control" placeholder="轮播图标题" >
 					</div>
 					<div class="form-group">
-						<label for="">密码</label>
-						<input type="password" name="pass" id="pass" class="form-control" placeholder="请输入新密码" >
-						<div class="pass_info">
-
-						</div>
+						<label for="">链接</label>
+						<input type="text" name="link" id="link" class="form-control" placeholder="请输入轮播图链接" >
 					</div>
 					<div class="form-group">
-						<label for="">确认密码</label>
-						<input type="password" name="repass" id="repass" class="form-control" placeholder="请再次输入密码" >
-						<div class="repass_info">
-
-						</div>
+						<label for="">排序</label>
+						<input type="text" name="sort" id="sort" class="form-control" placeholder="数值越大越靠前" >
 					</div>
-					<div class="form-group">
-						<label for="">状态</label>
-						<br>
-						<input type="radio" name="status" checked value="0" >正常
-						<input type="radio" name="status" value="1" >禁用
+					<div class="form-group ">
+						<label for="">图片选择</label>
+
+                        <div class="image-box" >
+                            <section class="upload-section" >
+                                <div class="upload-btn"></div>
+                                <input type="file" name="file" id="upload-input" value="" accept="image/jpg,image/jpeg,image/png,image/bmp" multiple="multiple" />
+                            </section>
+                        </div>
+
 					</div>
 					<div class="form-group pull-right">
-						<input type="submit" value="提交" onclick="save()" class="btn btn-success">
+						<input type="submit" value="提交"  onclick="save()" class="btn btn-success">
 						<input type="reset" id="reset" value="重置" class="btn btn-danger">
 					</div>
 
 					<div style="clear:both"></div>
 				</form>
 			</div>
-			
+
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+    <script>
 
+        $("#upload-input").ajaxImageUpload({
+            url: '/file_upload', //上传的服务器地址
+            data: { dir:'lunbo',_token:"{{csrf_token()}}" },
+            maxNum: 2, //允许上传图片数量
+            zoom: true, //允许上传图片点击放大
+            allowType: ["gif", "jpeg", "jpg", "bmp",'png'], //允许上传图片的类型
+            maxSize :2, //允许上传图片的最大尺寸，单位M
+            before: function () {
+            },
+            success:function(data){
+            },
+            error:function (e) {
+                swal('上传失败','','error');
+            }
+        });
 
-
+    </script>
 <script>
+
     $('.creation').click(function(){
         clean();
-        $('.modal-title').html("添加管理员");
+        $('.modal-title').html("添加轮播图");
         $('#add').modal('show');
     });
 
 	$('.editaction').click(function(){
         clean();
 	    admin_obj = $(this).data('admin');
-	    $('.modal-title').html("修改管理员");
+	    $('.modal-title').html("修改轮播图");
         $('#id').val(admin_obj.id);
         $('#name').val(admin_obj.name);
         $('#pass').val(admin_obj.pass);
@@ -268,10 +278,9 @@
         })
 
 	}
-	
+
 	function clean() {
 	    $('#id').val('');
-        $('.name_info div,.pass_info div,.repass_info div').remove();
         $('#reset').click();
     }
 </script>
