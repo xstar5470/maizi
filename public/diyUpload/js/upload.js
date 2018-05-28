@@ -30,7 +30,7 @@
         isUploading  = false;
 
         thisObj.each(function(i){
-            thisObj.change(function(){
+            $(this).change(function(){
                 handleFileSelect();
             });
         });
@@ -38,6 +38,7 @@
         var handleFileSelect = function(){
 
             if (typeof FileReader == "undefined") {
+
                 return false;
             }
 
@@ -50,13 +51,8 @@
             var allowType = config.allowType;
 
             if(!postUrl){
-                alert('请设置要上传的服务端地址');
+                swal('请设置要上传的服务端地址','','success');
                 return false;
-            }
-
-            if(imageNum + 1 > maxNum ){
-                alert("上传图片数目不可以超过"+maxNum+"个");
-                return;
             }
 
             var files    = thisObj[0].files;
@@ -84,10 +80,8 @@
             }
 
             if(isUploading == true){
-
                 alert('文件正在上传中，请稍候再试！');
                 return false;
-
             }
 
             // 将上传状态设为正在上传中
@@ -100,6 +94,9 @@
                 return false;
             }
 
+            if(imageNum + 1 >= maxNum ){
+                $('.upload-section').css('display','none');
+            }
             createImageSection();
 
             ajaxUpload();
@@ -200,6 +197,7 @@
                 deleteImageSection.remove();
 
                 deleteModal.hide();
+                $('.upload-section').css('display','block');
 
             });
 

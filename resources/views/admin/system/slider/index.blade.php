@@ -157,7 +157,7 @@
 
 
     $("body").delegate(".status",'click',function(){
-	    var id = $(this).data('id');
+            var id = $(this).data('id');
 	    var status = $(this).data('status');
         if(status == '1'){
             status = 0;

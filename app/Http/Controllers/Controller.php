@@ -45,7 +45,7 @@ class Controller extends BaseController
         ], $status);
     }
 
-    public function upload(){
+    public function upload(Request $request){
         $file = $_FILES["file"]; // file是上传按钮名
         $dir = $_POST['dir'];
 
@@ -64,9 +64,13 @@ class Controller extends BaseController
         if(!is_dir($upload_path)){
             mkdir($upload_path);
         }
+        $extarr = explode(".",$file['name']);
+        $ext = $extarr[1];
+        $newFile=time().rand().'.'.$ext;
+        // 生成新的文件名
 
-        if(move_uploaded_file($file["tmp_name"], $upload_path.$file['name'])){
-            return json_encode(['code' => 200, 'src' => $file_path.$file['name']]);
+        if(move_uploaded_file($file["tmp_name"], $upload_path.$newFile)){
+            return json_encode(['code' => 200, 'src' => $file_path.$newFile]);
         }else{
             return json_encode(array('code' => 404, 'msg' => '上传失败'));
         }
