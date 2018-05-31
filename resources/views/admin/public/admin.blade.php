@@ -149,7 +149,7 @@
 						<h2 class="panel-title"><span class="glyphicon glyphicon-certificate"></span> 系统管理</h2>
 					</div>
 					<ul class="list-group">
-					    <li class="list-group-item"><a href="">系统配置</a></li>
+					    <li class="list-group-item"><a href="/admin/system/config">系统配置</a></li>
 					    <li class="list-group-item"><a href="/admin/system/slider">轮播图管理</a></li>
 					    <li class="list-group-item"><a href="">广告管理</a></li>
 					 	

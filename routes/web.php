@@ -5,7 +5,9 @@
         Route::get('type/{id}','TypeController@index');
         Route::get('good/{id}','GoodController@index');
     });
-
+Route::get('test',function(){
+   dd(config('website.web_logo'));
+});
 //文件上传
 Route::any('file_upload','Controller@upload');
 //后台
@@ -34,7 +36,9 @@ Route::any('file_upload','Controller@upload');
             Route::get('system/slider','SliderController@index');
             Route::post('system/slider/store','SliderController@store');
             Route::post('system/slider/delete','SliderController@destroy');
-
+            //系统配置
+            Route::get('system/config','SiteController@index');
+            Route::post('system/config/store','SiteController@store');
     });
 
 

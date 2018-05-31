@@ -40,7 +40,7 @@ class TypeController extends Controller
         ];
         $validator = Validator::make($data,$rules,$message);
         if($validator->fails()){
-            return $this->err('',$validator->errors()->first());
+            return err('',$validator->errors()->first());
         }
 
         if($id){
@@ -50,7 +50,7 @@ class TypeController extends Controller
             Type::create($data);
             $message = '创建成功';
         }
-        return $this->res('',$message);
+        return res('',$message);
     }
 
 
@@ -61,14 +61,14 @@ class TypeController extends Controller
         foreach ($ids as $id){
             Type::where('id',$id)->orWhere('path','like',"%,$id,%")->delete();
         }
-        return $this->res('','删除成功');
+        return res('','删除成功');
     }
 
     public function status(Request $request){
         $data = $request->only('id','status');
         $result = Admin::where('id',$data['id'])->update(['status' => $data['status'] ]);
         if($result){
-            return $this->res('','变更成功');
+            return res('','变更成功');
         }
     }
 

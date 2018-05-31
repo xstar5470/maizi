@@ -60,7 +60,8 @@ return [
             'secret' => 'your-secret',
             'region' => 'your-region',
             'bucket' => 'your-bucket',
-        ],
+        ]
+
 
     ],
 

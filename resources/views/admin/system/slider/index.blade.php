@@ -41,19 +41,19 @@
             @if(count($data)>0)
 			@foreach($data as $value)
 				<tr>
-					<td><input type="checkbox" name="" id="{{$value->id}}"></td>
+					<td><input type="checkbox" class="deldata" id="{{$value->id}}"></td>
 					<td>{{$value->id}}</td>
 					<td>{{$value->title}}</td>
 					<td>{{$value->link}}</td>
 					<td>{{$value->sort}}</td>
-					<td>{{$value->img}}</td>
+					<td><img src="{{$value->img}}" alt="{{$value->title}}" style="height: 60px;width: 80px"></td>
 
-					<td ><a href="javascript:;"  data-admin="{{$value}}"  class="glyphicon glyphicon-pencil editaction"></a>&nbsp;&nbsp;&nbsp;<a href="javascript:;" onclick="deletes({{$value->id}})" class="glyphicon glyphicon-trash"></a></td>
+					<td ><a href="javascript:;"  data-item="{{$value}}"  class="glyphicon glyphicon-pencil editaction"></a>&nbsp;&nbsp;&nbsp;<a href="javascript:;" onclick="deletes({{$value->id}})" class="glyphicon glyphicon-trash"></a></td>
 				</tr>
 			@endforeach
 			@else
 				<tr>
-					<td colspan="6" style="text-align: center">
+					<td colspan="7" style="text-align: center">
 						无数据
 					</td>
 				</tr>
@@ -62,7 +62,7 @@
 		</table>
 		<!-- 分页效果 -->
 		<div class="panel-footer">
-			{{--{{ $data->links() }}--}}
+			{{ $data->links() }}
 
 		</div>
 	</div>
@@ -115,11 +115,11 @@
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
     <script>
-
+        var maxNum = 1;
         $("#upload-input").ajaxImageUpload({
             url: '/file_upload', //上传的服务器地址
-            data: { dir:'lunbo',_token:"{{csrf_token()}}" },
-            maxNum: 2, //允许上传图片数量
+            data: { _token:"{{csrf_token()}}" },
+            maxNum: maxNum, //允许上传图片数量
             zoom: true, //允许上传图片点击放大
             allowType: ["gif", "jpeg", "jpg", "bmp",'png'], //允许上传图片的类型
             maxSize :2, //允许上传图片的最大尺寸，单位M
@@ -131,7 +131,6 @@
                 swal('上传失败','','error');
             }
         });
-
     </script>
 <script>
 
@@ -143,53 +142,24 @@
 
 	$('.editaction').click(function(){
         clean();
-	    admin_obj = $(this).data('admin');
+	    item = $(this).data('item');
 	    $('.modal-title').html("修改轮播图");
-        $('#id').val(admin_obj.id);
-        $('#name').val(admin_obj.name);
-        $('#pass').val(admin_obj.pass);
-        $('#repass').val(admin_obj.pass);
-        if(admin_obj.status == 1){
-            $('input[name="status"]:eq(1)').prop("checked",true);
-		}
+        $('#id').val(item.id);
+        $('#title').val(item.title);
+        $('#link').val(item.link);
+        $('#sort').val(item.sort);
+        $('.image-box').prepend(
+            '<section class="image-section">'+
+                '<div class="image-shade"></div>'+
+                '<div class="image-delete"></div>'+
+                '<img class="image-show" src="'+item.img+'" />'+
+                '<input class="file" name="file[]" value="'+item.img+'" type="hidden" />'+
+            '</section>'
+        );
+        $(".upload-section").css('display','none');
         $('#add').modal('show');
 	});
 
-
-    $("body").delegate(".status",'click',function(){
-            var id = $(this).data('id');
-	    var status = $(this).data('status');
-        if(status == '1'){
-            status = 0;
-        }else{
-            status = 1;
-        }
-        var th = this;
-
-        $.ajax({
-            url:'/admin/admin/status',
-            type:"POST",
-            data:{'id':id,'status':status},
-            headers:{
-                'X-CSRF-TOKEN':'{{csrf_token()}}'
-            },
-            dataType:'json',
-            success:function(data){
-                if(data.code == 0){
-                    if(status){
-                        str = '<span class="btn btn-danger status" data-id="'+id+'" data-status="1">禁用</span>';
-                    }else{
-                        str = '<span class="btn btn-success status" data-id="'+id+'" data-status="0" >正常</span>';
-                    }
-                    $(th).parent().parent().find('.editaction').data('admin').status = status;
-                    $(th).parent().html(str);
-                }
-            },
-            error:function(){
-                swal('修改失败','','error');
-            }
-        })
-    })
 
 	function deletes(id){
         swal({
@@ -204,7 +174,7 @@
             if(id !=0 ){
                 ids.push(id);
             }else{
-                $('input[type="checkbox"]:checked').each(function(){
+                $('.deldata:checked').each(function(){
                     ids.push($(this).attr('id'));
                 })
                 if(ids.length <= 0){
@@ -213,7 +183,7 @@
                 }
             }
             $.ajax({
-                url:"/admin/admin/delete",
+                url:"/admin/system/slider/delete",
                 type:"POST",
                 dataType: 'json',
                 headers: {
@@ -237,38 +207,16 @@
 	// 添加及修改的处理操作
 	function save(){
         $.ajax({
-            'url':'/admin/admin/store',
+            'url':'/admin/system/slider/store',
             data: new FormData($('#formAdd')[0]),
             type: 'POST',
             contentType: false,
             processData: false,
             success: function(data) {
-
                 if (data.code == 0 ) {
 					swalreload(data.message,'');
-                }else if(data.code == 1){
-                    // 用户名提示信息
-                    var str='';
-                    if (data.data.name) {
-                        str="<div class='alert alert-danger'>"+data.data.name[0]+"</div>";
-                    }else{
-                        str="<div class='alert alert-success'>√</div>";
-                    }
-                    $(".name_info").html(str);
-                    // 密码提示信息
-                    if (data.data.pass) {
-                        str="<div class='alert alert-danger'>"+data.data.pass[0]+"</div>";
-                    }else{
-                        str="<div class='alert alert-success'>√</div>";
-                    }
-                    $(".pass_info").html(str);
-                    // 确认密码提示信息
-                    if (data.data.repass) {
-                        str="<div class='alert alert-danger'>"+data.data.repass[0]+"</div>";
-                    }else{
-                        str="<div class='alert alert-success'>√</div>";
-                    }
-                    $(".repass_info").html(str);
+                }else{
+                    swal(data.message,'','error');
                 }
             },
 			error:function(){
@@ -281,6 +229,8 @@
 
 	function clean() {
 	    $('#id').val('');
+        $('.image-section').remove();
+        $('.upload-section').css('display','block');
         $('#reset').click();
     }
 </script>

@@ -46,7 +46,7 @@ class AdminController extends Controller
         ];
         $validator = Validator::make($data,$rules,$message);
         if($validator->fails()){
-            return $this->err($validator->errors());
+            return err($validator->errors());
         }
         unset($data['repass']);
         $data['pass'] = Crypt::encrypt($data['pass']);
@@ -59,7 +59,7 @@ class AdminController extends Controller
             Admin::create($data);
             $message = '创建成功';
         }
-        return $this->res('',$message);
+        return res('',$message);
     }
 
 
@@ -67,14 +67,14 @@ class AdminController extends Controller
         $data = $request->only('ids');
         $ids = $data['ids'];
         Admin::destroy($ids);
-        return $this->res('','删除成功');
+        return res('','删除成功');
     }
 
     public function status(Request $request){
         $data = $request->only('id','status');
         $result = Admin::where('id',$data['id'])->update(['status' => $data['status'] ]);
         if($result){
-            return $this->res('','变更成功');
+            return res('','变更成功');
         }
     }
 

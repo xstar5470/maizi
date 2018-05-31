@@ -9,10 +9,10 @@
 namespace App\Http\Models;
 use Illuminate\Database\Eloquent\Model;
 
-class Type extends Model
+class Slider extends Model
 {
     public $timestamps = false;
-    protected $table = 'types';
+    protected $table = 'sliders';
     protected $guarded = [];
     protected $primaryKey = 'id';
 

@@ -7,6 +7,7 @@
  */
 namespace  App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
+use App\Providers\code\Code;
 class LoginController extends Controller
 {
     public function index(){
@@ -14,8 +15,7 @@ class LoginController extends Controller
     }
 
     public function yzm(){
-        require_once('../resources/code/Code.class.php');
-        $code = new \Code();
+        $code = new Code();
         return $code->make();
     }
 }

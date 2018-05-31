@@ -1,5 +1,5 @@
 <?php
-
+namespace App\Providers\code;
 class Code{
 
 	//资源
@@ -31,7 +31,7 @@ class Code{
 	{
 		if(empty($this->font))
 		{
-			$this->font = __DIR__.'/consola.ttf';
+			$this->font = __DIR__ . '/consola.ttf';
 		}
 		$this->create();//生成验证码
 		header("Content-type:image/png");

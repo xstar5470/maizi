@@ -30,15 +30,15 @@
         isUploading  = false;
 
         thisObj.each(function(i){
-            $(this).change(function(){
-                handleFileSelect();
+           thisObj.change(function(){
+               handleFileSelect();
+               thisObj.val('');
             });
         });
 
         var handleFileSelect = function(){
 
             if (typeof FileReader == "undefined") {
-
                 return false;
             }
 
@@ -73,10 +73,8 @@
             }
 
             if(fileSize > maxSize){
-
                 alert('上传图片不能超过' + maxSize + 'M，当前上传图片的大小为'+fileSize.toFixed(2) + 'M');
                 return false;
-
             }
 
             if(isUploading == true){
@@ -98,9 +96,7 @@
                 $('.upload-section').css('display','none');
             }
             createImageSection();
-
             ajaxUpload();
-
         };
 
         var ajaxUpload = function () {
@@ -114,10 +110,8 @@
             var fileData = thisObj[0].files;
 
             if(fileData){
-
                 // 目前仅支持单图上传
                 formData.append(inputName, fileData[0]);
-
             }
 
             var postData = config.data;
