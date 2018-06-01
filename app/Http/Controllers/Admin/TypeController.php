@@ -31,12 +31,13 @@ class TypeController extends Controller
         $id = $request->input('id');
         $rules=[
             'name' => 'required|unique:types',
-            'sort' => 'integer'
+            'sort' => 'integer|between:0,2'
         ];
         $message=[
             "name.required"=>"请输入分类名",
             "name.unique"=>"该分类名已存在",
-            "sort.integer" => "排序必须是数字"
+            "sort.integer" => "排序必须是数字",
+            "sort.between" => "排序不能超过两位数"
         ];
         $validator = Validator::make($data,$rules,$message);
         if($validator->fails()){

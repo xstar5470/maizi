@@ -7,59 +7,61 @@
  */
 namespace  App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
+use App\Http\Models\Good;
 use Illuminate\Http\Request;
-use App\Http\Models\Slider;
 use Illuminate\Support\Facades\Validator;
 
 
-class SliderController extends Controller
+class GoodController extends Controller
 {
     public function index(){
-        $tot = Slider::count();
-        $data = Slider::OrderBy('sort','desc')->paginate(5);
-        return view('admin.system.slider.index',compact('tot','data'));
+        $tot = Good::count();
+        $data = Good::paginate(15);
+
+        return view('admin.admin.index',compact('tot','data'));
     }
 
 
     public function store(Request $request){
-        $data = $request->only('title','link','sort','file');
+        $data = $request->only('cid','title','file','price','num','text','config');
         $id = $request->input('id');
 
         $rules=[
+            'cid' => 'required',
             'title' => 'required',
-            'link' => 'required',
-            'sort' => 'between:0,2',
             'file' => 'required',
+            'price' => 'required',
+            'num' => 'required'
         ];
         $message=[
-            "title.required"=>"请输入标题",
-            "link.required"=>"请输入链接",
-            "file.required"=>"请选择图片",
-            "sort.between"=>"排序不超过两位数",
+            "cid.required"=>"请选择分类",
+            "title.required"=>"请输入商品名",
+            "price.required"=>"请输入商品价格",
+            "num.required"=>"请输入商品库存",
+            "file.required"=>"请上传商品封面",
         ];
         $validator = Validator::make($data,$rules,$message);
         if($validator->fails()){
-            return err('',$validator->errors()->first());
+            return err($validator->errors()->first());
         }
-        $data['img'] = $data['file'][0];
-        unset($data['file']);
 
-        $msg = '';
+        $message = '';
         if($id){
-            Slider::where('id',$id)->update($data);
-            $msg = '修改成功';
+            Admin::where('id',$id)->update($data);
+            $message = '修改成功';
         }else{
-            Slider::create($data);
-            $msg = '创建成功';
+            $data['dateline'] = time();
+            Admin::create($data);
+            $message = '创建成功';
         }
-        return res('',$msg);
+        return res('',$message);
     }
 
 
     public function destroy(Request $request){
         $data = $request->only('ids');
         $ids = $data['ids'];
-        Slider::destroy($ids);
+        Admin::destroy($ids);
         return res('','删除成功');
     }
 
