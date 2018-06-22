@@ -1,47 +1,175 @@
 @extends('admin.public.admin')
 
 @section('main')
-<!-- 内容 -->
-<div class="col-md-10">
-	
-	<ol class="breadcrumb">
-		<li><a href="#"><span class="glyphicon glyphicon-home"></span> 首页</a></li>
-		<li><a href="#">分类管理</a></li>
-		<li class="active">分类修改</li>
+	<link rel="stylesheet" href="{{asset('diyUpload/css/upload.css')}}">
+	<script src="{{asset('diyUpload/js/upload.js')}}"></script>
+	<script type="text/javascript" charset="utf-8" src="{{asset("ueditor/ueditor.config.js")}}"></script>
+	<script type="text/javascript" charset="utf-8" src="{{asset("ueditor/ueditor.all.min.js")}}"> </script>
+	<script type="text/javascript" charset="utf-8" src="{{asset("ueditor/lang/zh-cn/zh-cn.js")}}"></script>
+	<!-- 内容 -->
+	<div class="col-md-10">
+		<ol class="breadcrumb">
+			<li><a href="/admin"><span class="glyphicon glyphicon-home"></span> 首页</a></li>
+			<li><a href="/admin/good">商品管理</a></li>
+			<li class="active">商品添加</li>
+			<button class="btn btn-primary btn-xs pull-right"><span class="glyphicon glyphicon-refresh"></span></button>
+		</ol>
 
-		<button class="btn btn-primary btn-xs pull-right"><span class="glyphicon glyphicon-refresh"></span></button>
-	</ol>
+		<!-- 面版 -->
+		<div class="panel panel-default">
+			<div class="panel-heading">
 
-	<!-- 面版 -->
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<a href="index.html" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> 分类页面</a>
-			<a href="" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> 修改分类</a>
-			
-			
 
+			</div>
+			<div class="panel-body">
+				<form  id="formAdd" onsubmit="return false">
+					{{csrf_field()}}
+					<input type="hidden" name="id" id="id" value="{{$data->id}}">
+
+					<div class="form-group">
+						<label for="">商品名</label>
+						<input type="text" name="title" class="form-control"  placeholder="请输入商品名" value="{{$data->title}}">
+					</div>
+					<div class="form-group">
+						<label>所属分类</label>
+						<select name="cid" class="form-control" id="">
+							<option value="">请选择商品分类</option>
+							@foreach($types as $value)
+								@if($value->repeat==2)
+									<option value="{{$value->id}}" @if($value->id == $data->cid) selected @endif>{{str_repeat('|--',$value->repeat).$value->name}}</option>
+								@else
+									<option disabled value="{{$value->id}}">{{str_repeat('|--',$value->repeat).$value->name}}</option>
+								@endif
+							@endforeach
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="">价格</label>
+						<input type="text" name="price" class="form-control"  placeholder="请输入商品价格" value="{{$data->price}}">
+					</div>
+					<div class="form-group">
+						<label for="">库存</label>
+						<input type="text" name="num" class="form-control" placeholder="请输入商品库存" value="{{$data->num}}">
+					</div>
+					<div class="form-group" style="height: 170px">
+						<label for="">商品封面图</label>
+						<div class="image-box " >
+
+							<section class="upload-section" >
+								<div class="upload-btn"></div>
+								<input type="file" name="file" id="upload-single" value="" accept="image/jpg,image/jpeg,image/png,image/bmp" multiple="multiple" />
+							</section>
+							<section class="image-box image-single" style="margin-left:15px">
+								<div class="image-shade-single"></div>
+								<img class="image-show-single" src="{{$data->img}}" />
+								<input id="img" name="img" value="{{$data->img}}" type="hidden" />
+							</section>
+						</div>
+					</div>
+					<div class="form-group" style="height: 170px">
+						<label for="">商品组图</label>
+						<div class="image-box" >
+							@foreach($data->imgs as $item)
+								<section class="image-section">
+									<div class="image-shade"></div>
+									<div class="image-delete"></div>
+									<img class="image-show" src="{{$item->img}}" />
+									<input class="file" name="file[]" value="{{$item->img}}" type="hidden" />
+								</section>
+							@endforeach
+
+							<section class="upload-section" @if(count($data->imgs)>=4) style="display: none" @endif>
+								<div class="upload-btn"></div>
+								<input type="file" name="file" id="upload-input" value="" accept="image/jpg,image/jpeg,image/png,image/bmp" multiple="multiple" />
+							</section>
+
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="">配置</label>
+						<script id="config" type="text/plain" name="config" style="height: 300px">{!! $data->config !!}</script>
+					</div>
+				    <div class="form-group">
+                            <label for="">商品详情</label>
+                            <script id="text" type="text/plain" name="text" style="height: 300px">{!! $data->text !!}</script>
+					</div>
+
+					<div class="form-group">
+						<input type="submit" value="提交" id="submit" class="btn btn-success">
+						<input type="reset" value="重置" class="btn btn-danger">
+					</div>
+
+				</form>
+			</div>
 
 		</div>
-		<div class="panel-body">
-			<form action="">
-				<div class="form-group">
-					<label for="">User</label>
-					<input type="text" name="" class="form-control" id="">
-				</div>
-
-				<div class="form-group">
-					<label for="">PASS</label>
-					<input type="password" name="" class="form-control" id="">
-				</div>
-
-				<div class="form-group">
-					<input type="submit" value="提交" class="btn btn-success">
-					<input type="reset" value="重置" class="btn btn-danger">
-				</div>
-
-			</form>
-		</div>
-		
 	</div>
-</div>
+	<script>
+        var ue_config = UE.getEditor('config');
+        var ue_text = UE.getEditor('text');
+        var maxNum = 4;
+        $("#upload-input").ajaxImageUpload({
+            url: '/file_upload', //上传的服务器地址
+            data: { _token:"{{csrf_token()}}" },
+            maxNum: maxNum, //允许上传图片数量
+            zoom: true, //允许上传图片点击放大
+            allowType: ["gif", "jpeg", "jpg", "bmp",'png'], //允许上传图片的类型
+            maxSize :1, //允许上传图片的最大尺寸，单位M
+            before: function () {
+            },
+            success:function(data){
+            },
+            error:function (e) {
+                swal('上传失败','','error');
+            }
+        });
+
+        $("#upload-single").change(function(){
+            var formData = new FormData();
+            formData.append('file', $('#upload-single')[0].files[0]);
+            $.ajax({
+                url: '/file_upload',
+                type: 'POST',
+                data: formData,
+                dataType:'json',
+                headers: {
+                    'X-CSRF-TOKEN': "{{csrf_token()}}"
+                },
+                processData: false,
+                contentType: false
+            }).done(function(res) {
+                $('.image-single').css('display','block');
+                $('.image-single .image-show-single').attr("src",res.src);
+                $('.image-single #img').val(res.src);
+            }).fail(function(res) {
+            });
+        })
+
+	</script>
+
+	<script>
+        //保存数据
+        $('#submit').click(function(){
+            $.ajax({
+                url:'/admin/goods/store',
+                type:"POST",
+                data:new FormData($('#formAdd')[0]),
+                contentType:false,
+                processData:false,
+                success:function(data){
+                    if(data.code == 0){
+                        swalreload(data.message,'/admin/goods');
+                    }else{
+                        swal(data.message,'','error');
+                    }
+                },
+                error:function(){
+                    swal("链接超时",'','error');
+                }
+
+            })
+        })
+
+	</script>
 @endsection

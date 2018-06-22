@@ -34,7 +34,6 @@
 			<th>标题</th>
 			<th>关键词</th>
 			<th>介绍</th>
-			<th>添加子类</th>
 			<th>楼层</th>
 			<th>操作</th>
 
@@ -47,17 +46,13 @@
 				<td>{{$value->keywords == '' ? '暂无':$value->keywords }}</td>
 				<td>{{$value->description == '' ? '暂无':$value->description }}</td>
 
-				@if($value->repeat == 2)
-				<td >添加子类</td>
-				@else
-				<td><a href="/admin/type/create?pid={{$value->id}}&path={{$value->path}}{{$value->id}},">添加子类</a></td>
-				@endif
+
 				@if($value->is_lou)
 					<td><span class="btn btn-success">是</span></td>
 				@else
 					<td><span class="btn btn-danger">否</span></td>
 				@endif
-				<td><a href="" class="glyphicon glyphicon-pencil"></a>&nbsp;&nbsp;&nbsp;<a href="javascript:;" onclick="del({{$value->id}})" class="glyphicon glyphicon-trash"></a></td>
+				<td><a href="/admin/type/{{$value->id}}/edit"  class="glyphicon glyphicon-pencil"></a>&nbsp;&nbsp;&nbsp;<a href="javascript:;" onclick="del({{$value->id}})" class="glyphicon glyphicon-trash"></a></td>
 			</tr>
 			@endforeach
 			

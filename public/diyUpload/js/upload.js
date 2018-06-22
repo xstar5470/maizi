@@ -23,7 +23,8 @@
         var thisObj = $(this);
         var config  = $.extend(defaults, options);
         var uploadBox = $(".box-upload");
-        var imageBox  = $(".image-box");
+        // var imageBox  = $(".image-box");
+        var imageBox  = $(this).parent().parent();
         var inputName = thisObj.attr('name');
 
         // 设置是否在上传中全局变量

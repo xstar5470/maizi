@@ -23,16 +23,32 @@ class TypeController extends Controller
     }
 
     public function create(){
-        return view('admin.types.add');
+        $topLevel = (new TypeService())->data(null);
+        return view('admin.types.add',compact("topLevel"));
+    }
+
+    public function edit(Type $type){
+        $topLevel = (new TypeService())->data(null);
+        return view('admin.types.edit',compact("topLevel",'type'));
     }
 
     public function store(Request $request){
         $data = $request->only('name','pid','path','title','keywords','description','sort','is_lou');
         $id = $request->input('id');
-        $rules=[
-            'name' => 'required|unique:types',
-            'sort' => 'integer|between:0,2'
-        ];
+        if($id){
+            $rules=[
+                'name' => 'required',
+                'sort' => 'integer|between:0,99'
+            ];
+            if(in_array($data['name'],Type::where('id','!=',$id)->pluck('name')->toArray())){
+               return err('',"分类名重复");
+            }
+        }else{
+            $rules=[
+                'name' => 'required|unique:types',
+                'sort' => 'integer|between:0,99'
+            ];
+        }
         $message=[
             "name.required"=>"请输入分类名",
             "name.unique"=>"该分类名已存在",
@@ -54,11 +70,9 @@ class TypeController extends Controller
         return res('',$message);
     }
 
-
     public function destroy(Request $request){
         $data = $request->only('ids');
         $ids = $data['ids'];
-
         foreach ($ids as $id){
             Type::where('id',$id)->orWhere('path','like',"%,$id,%")->delete();
         }

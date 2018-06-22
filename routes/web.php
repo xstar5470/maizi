@@ -1,13 +1,8 @@
 <?php
-//前台
-    Route::group(['prefix'=>'','namespace'=>'Home'],function(){
-        Route::get('/','IndexController@index');
-        Route::get('type/{id}','TypeController@index');
-        Route::get('good/{id}','GoodController@index');
-    });
-Route::get('test',function(){
-   dd(config('website.web_logo'));
-});
+
+
+
+
 //文件上传
 Route::any('file_upload','Controller@upload');
 //后台
@@ -27,10 +22,17 @@ Route::any('file_upload','Controller@upload');
         //分类
         Route::get('type','TypeController@index');
         Route::get('type/create','TypeController@create');
-        Route::get('type/edit','TypeController@edit');
+        Route::get('type/{type}/edit','TypeController@edit');
         Route::post('type/store','TypeController@store');
         Route::post('type/delete','TypeController@destroy');
         Route::post('type/status','TypeController@status');
+        //商品
+        Route::get('goods','GoodController@index');
+        Route::get('goods/create','GoodController@create');
+        Route::get('goods/{id}/edit','GoodController@edit');
+        Route::post('goods/store','GoodController@store');
+        Route::post('goods/delete','GoodController@destroy');
+
         //系统
              //系统轮播图
             Route::get('system/slider','SliderController@index');

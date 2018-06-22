@@ -97,7 +97,7 @@
     cursor:pointer;
 }
 
-.image-box .image-show{
+.image-box .image-show,.image-show-single{
 	display: block;
 	width: 100%;
 	height: 100%;
@@ -114,7 +114,7 @@
 
 
 /*上传域样式*/
-.upload-section #upload-input{
+.upload-section #upload-input,#upload-single{
 	width: 100%;
 	height: 100%;
 	opacity: 0;

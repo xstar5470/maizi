@@ -9,14 +9,10 @@
 namespace App\Http\Models;
 use Illuminate\Database\Eloquent\Model;
 
-class Good extends Model
+class GoodImg extends Model
 {
     public $timestamps = false;
-    protected $table = 'goods';
+    protected $table = 'goods_img';
     protected $guarded = [];
     protected $primaryKey = 'id';
-
-    public function imgs(){
-        return $this->hasMany('App\Http\Models\GoodImg','gid','id');
-    }
 }

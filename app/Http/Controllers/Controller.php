@@ -16,6 +16,7 @@ class Controller extends BaseController
 
     public function upload(Request $request){
         $file = $_FILES["file"]; // file是上传按钮名
+
         if(!isset($file['tmp_name']) || !$file['tmp_name']) {
             echo json_encode(array('code' => 401, 'msg' => '没有文件上传'));
             return false;

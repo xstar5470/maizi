@@ -31,6 +31,7 @@ class TypeService
         }
         return $this->data;
     }
+
     public function render($pid = 0){
         $types = Type::where('pid',$pid)->get();
         if(!$types->isEmpty()){

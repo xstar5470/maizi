@@ -24,10 +24,20 @@
 					<label for="">分类名</label>
 					{{csrf_field()}}
 					<input type="text" name="name" class="form-control"  placeholder="请输入分类名">
-					<input type="hidden" name="pid" value="{{$_GET['pid']?? 0}}">
-					<input type="hidden" name="path" value="{{$_GET['path']??'0,'}}">
+					<input type="hidden" name="path" value="" id="path">
 				</div>
+				<div class="form-group">
+					<label>上层分类</label>
+					<select name="pid" class="form-control" id="">
+						<option value="0" data-path="0," >请选择上级分类</option>
 
+						@foreach($topLevel as $value)
+							@if($value->repeat!=2)
+								<option value="{{$value->id}}" data-path="{{$value->path.$value->id.','}}">{{str_repeat('|--',$value->repeat).$value->name}}</option>
+							@endif
+						@endforeach
+					</select>
+				</div>
 				<div class="form-group">
 					<label for="">标题</label>
 					<input type="text" name="title" placeholder="请输入分类标题" class="form-control" id="">
@@ -64,6 +74,8 @@
 <script>
 	//保存数据
 	$('#submit').click(function(){
+	    $('input[name=path]').val($('option:selected').data('path'));
+
 		$.ajax({
 			url:'/admin/type/store',
 			type:"POST",
@@ -72,7 +84,6 @@
 			processData:false,
 			success:function(data){
 			    if(data.code == 0){
-
 			        swalreload(data.message,'/admin/type');
 				}else{
                     swal(data.message,'','error');

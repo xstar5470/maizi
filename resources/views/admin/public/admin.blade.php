@@ -121,7 +121,7 @@
 						<h2 class="panel-title"><span class="glyphicon glyphicon-gift"></span> 商品管理</h2>
 					</div>
 					<ul class="list-group">
-					    <li class="list-group-item"><a href="">商品列表</a></li> 	
+					    <li class="list-group-item"><a href="/admin/goods">商品列表</a></li>
 					</ul>
 				</div>
 				<!-- 订单管理 -->
